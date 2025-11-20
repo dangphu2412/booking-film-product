@@ -71,26 +71,20 @@ services:
     ports:
       - "6379:6379"
 
-  conductor:
-    image: orkesio/orkes-conductor-community-standalone:1.1.12
-    depends_on:
-      - kafka-1
-      - kafka-2
-      - redis
+  kestra:
+    image: kestra/kestra:v1.0-no-plugins
+    container_name: kestra-standalone
     ports:
-      - "8081:8080"
-      - "4888:5000"
+      - "8080:8080"
     environment:
-      # === DB / Redis (auto-configured internally for standalone) ===
-      LOADSAMPLE: "true"
-      CONDUCTOR_GRPC_SERVER_ENABLED: "true"
+      # --- 1. Database Configuration ---
+      # Tell Kestra to use Postgres for its repository
+      KESTRA_CONFIGURATION_REPOSITORY_TYPE: "postgres"
+      KESTRA_CONFIGURATION_REPOSITORY_POSTGRES_URL: "jdbc:postgresql://postgres:5432/kestra"
+      KESTRA_CONFIGURATION_REPOSITORY_POSTGRES_USERNAME: "postgres"
+      KESTRA_CONFIGURATION_REPOSITORY_POSTGRES_PASSWORD: "241299"
 
-      # === Kafka Integration ===
-      KAFKA_ENABLED: "true"
-      KAFKA_BOOTSTRAP_SERVERS: "kafka-1:9092,kafka-2:9093"
-      KAFKA_SECURITY_PROTOCOL: "PLAINTEXT"
+      # Tell Kestra to use Kafka for its queue
+      KESTRA_CONFIGURATION_QUEUE_TYPE: "kafka"
 
-      # === Kafka Eventing Sink ===
-      CONFIG_PROP_conductor_event_processor_enabled: "true"
-      CONFIG_PROP_conductor_event_queues_kafka_bootstrap_servers: "kafka-1:9092,kafka-2:9093"
-      CONFIG_PROP_conductor_event_queues_kafka_enabled: "true"
+      KESTRA_CONFIGURATION_KAFKA_BOOTSTRAP_SERVERS: "kafka-1:9092,kafka-2:9093"
