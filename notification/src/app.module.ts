@@ -4,7 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
 import { DatabaseModule } from './database/database.module';
 import { CqrsModule } from '@nestjs/cqrs';
-import { MailModule } from './registration/mail.module';
+import { InAppNotificationModule } from './in-app-notification/in-app-notification.module';
 import { APP_FILTER } from '@nestjs/core';
 import { RpcServiceExceptionFilter } from '@dnp2412/service-common';
 
@@ -12,7 +12,7 @@ import { RpcServiceExceptionFilter } from '@dnp2412/service-common';
   imports: [
     DatabaseModule,
     HealthCheckModule,
-    MailModule,
+    InAppNotificationModule,
     CqrsModule.forRoot(),
     ConfigModule.forRoot({ isGlobal: true }),
     LoggerModule.forRootAsync({
