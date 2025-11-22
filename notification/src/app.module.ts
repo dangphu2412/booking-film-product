@@ -22,7 +22,7 @@ import { RpcServiceExceptionFilter } from '@dnp2412/service-common';
 
         return {
           pinoHttp: {
-            level: nodeEnv !== 'production' ? 'debug' : 'info',
+            level: configService.get<string>('LOG_LEVEL', 'info').toLowerCase(),
             transport:
               nodeEnv !== 'production' ? { target: 'pino-pretty' } : undefined,
           },

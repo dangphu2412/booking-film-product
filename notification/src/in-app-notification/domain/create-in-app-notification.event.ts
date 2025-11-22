@@ -3,5 +3,9 @@ export const CREATE_IN_APP_NOTIFICATION_EVENT =
 
 export type CreateInAppNotificationPayload = {
   to: string[];
-  message: string;
+  eventType: string;
+  title: string;
+  body: string;
+  actionLink?: string;
+  metadata?: Record<string, any>;
 };

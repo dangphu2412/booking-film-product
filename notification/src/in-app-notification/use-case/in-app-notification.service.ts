@@ -1,14 +1,32 @@
 import { InAppNotificationService } from '../domain/in-app-notification-service.interface';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateInAppNotificationDTO } from './create-in-app-notification.dto';
+import { InAppNotificationRepositoryInterface } from '../domain/in-app-notification-repository.interface';
+import { NotificationAggregate } from '../domain/in-app-notification.aggregate';
 
 @Injectable()
 export class InAppNotificationServiceImpl implements InAppNotificationService {
+  constructor(
+    @Inject(InAppNotificationRepositoryInterface)
+    private readonly inAppNotificationRepository: InAppNotificationRepositoryInterface,
+  ) {}
+
   create(
     createInAppNotificationDTO: CreateInAppNotificationDTO,
   ): Promise<void> {
-    console.log('InAppNotificationService create', createInAppNotificationDTO);
+    const notificationAggregates = createInAppNotificationDTO.to.map(
+      (targetEmail) => {
+        return NotificationAggregate.create(
+          targetEmail,
+          createInAppNotificationDTO.eventType,
+          createInAppNotificationDTO.title,
+          createInAppNotificationDTO.body,
+          createInAppNotificationDTO.actionLink,
+          createInAppNotificationDTO.metadata,
+        );
+      },
+    );
 
-    return Promise.resolve();
+    return this.inAppNotificationRepository.createMany(notificationAggregates);
   }
 }

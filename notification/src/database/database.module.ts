@@ -4,7 +4,6 @@ import { addTransactionalDataSource } from 'typeorm-transactional';
 import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { join } from 'path';
-import { UserEntity } from './user.entity';
 
 @Module({
   imports: [
@@ -15,7 +14,7 @@ import { UserEntity } from './user.entity';
           type: 'postgres',
           migrationsRun: true,
           synchronize: false,
-          entities: [UserEntity],
+          entities: [join(__dirname, './entities/*{.ts,.js}')],
           migrations: [join(__dirname, './migrations/*{.ts,.js}')],
           migrationsTableName: 'migrations',
           url: configService.getOrThrow<string>('DATABASE_URL'),
