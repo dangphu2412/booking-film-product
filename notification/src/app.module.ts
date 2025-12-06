@@ -7,11 +7,13 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { InAppNotificationModule } from './in-app-notification/in-app-notification.module';
 import { APP_FILTER } from '@nestjs/core';
 import { RpcServiceExceptionFilter } from '@dnp2412/service-common';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
     DatabaseModule,
     HealthCheckModule,
+    EmailModule,
     InAppNotificationModule,
     CqrsModule.forRoot(),
     ConfigModule.forRoot({ isGlobal: true }),

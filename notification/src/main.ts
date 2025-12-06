@@ -12,9 +12,9 @@ async function bootstrap() {
     bufferLogs: true,
   });
   const configService = app.get(ConfigService);
-  const brokers = configService
-    .get<string>('KAFKA_BROKERS', 'localhost:19092,localhost:19093')
-    .split(',');
+  // const brokers = configService
+  //   .get<string>('KAFKA_BROKERS', 'localhost:19092,localhost:19093')
+  //   .split(',');
 
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.GRPC,
@@ -32,24 +32,24 @@ async function bootstrap() {
     },
   });
 
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.KAFKA,
-    options: {
-      client: {
-        clientId: 'notification',
-        brokers,
-      },
-      consumer: {
-        groupId: 'notification-group',
-      },
-      producer: {
-        retry: {
-          retries: 2,
-          initialRetryTime: 300,
-        },
-      },
-    },
-  });
+  // app.connectMicroservice<MicroserviceOptions>({
+  //   transport: Transport.KAFKA,
+  //   options: {
+  //     client: {
+  //       clientId: 'notification',
+  //       brokers,
+  //     },
+  //     consumer: {
+  //       groupId: 'notification-group',
+  //     },
+  //     producer: {
+  //       retry: {
+  //         retries: 2,
+  //         initialRetryTime: 300,
+  //       },
+  //     },
+  //   },
+  // });
   const logger = app.get(Logger);
 
   app.useLogger(logger);

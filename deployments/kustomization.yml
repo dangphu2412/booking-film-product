@@ -3,3 +3,4 @@ resources:
   - kafka.yml
   - orkes-conductor.yml
   - redis.yml
+  - local-dev.yml

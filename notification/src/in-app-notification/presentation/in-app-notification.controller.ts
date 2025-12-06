@@ -13,10 +13,10 @@ export class InAppNotificationController {
     private readonly inAppNotificationService: InAppNotificationService,
   ) {}
 
-  @EventPattern(CREATE_IN_APP_NOTIFICATION_EVENT)
-  handleCreateInAppNotificationPayload(
-    @Payload() payload: CreateInAppNotificationPayload,
-  ) {
-    return this.inAppNotificationService.create(payload);
-  }
+  // @EventPattern(CREATE_IN_APP_NOTIFICATION_EVENT)
+  // handleCreateInAppNotificationPayload(
+  //   @Payload() payload: CreateInAppNotificationPayload,
+  // ) {
+  //   return this.inAppNotificationService.create(payload);
+  // }
 }

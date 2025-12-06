@@ -19,6 +19,7 @@ export class MailController implements OnModuleInit {
     this.mailServiceClient =
       this.client.getService<MailServiceClient>(MAIL_SERVICE_NAME);
   }
+
   @Post()
   send(@Body() body: MailBody) {
     return this.mailServiceClient.send(body);
