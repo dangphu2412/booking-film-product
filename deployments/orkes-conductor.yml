@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: conductor
+spec:
+  selector:
+    app: conductor
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conductor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conductor
+  template:
+    metadata:
+      labels:
+        app: conductor
+    spec:
+      containers:
+        - name: conductor
+          image: orkesio/orkes-conductor-community-standalone:1.1.12
+          ports:
+            - containerPort: 8080
+            - containerPort: 5000
+          env:
+            - name: CONDUCTOR_DB
+              value: "memory"
+            - name: CONDUCTOR_REDIS_HOST
+              value: "redis"
+            - name: CONDUCTOR_EVENT_QUEUES_KAFKA_ENABLED
+              value: "true"
+            # UPDATED: Connect to 'kafka-broker'
+            - name: CONDUCTOR_EVENT_QUEUES_KAFKA_KAFKA_CAM_BOOTSTRAP_SERVERS
+              value: "kafka-broker:9092"
+            - name: CONDUCTOR_EVENT_QUEUES_KAFKA_BOOTSTRAP_SERVERS
+              value: "kafka-broker:9092"
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"

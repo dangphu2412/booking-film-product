@@ -1,14 +1,14 @@
 import { InAppNotificationService } from '../domain/in-app-notification-service.interface';
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateInAppNotificationDTO } from './create-in-app-notification.dto';
-import { InAppNotificationRepositoryInterface } from '../domain/in-app-notification-repository.interface';
+import { InAppNotificationRepository } from '../domain/in-app-notification-repository.interface';
 import { NotificationAggregate } from '../domain/in-app-notification.aggregate';
 
 @Injectable()
 export class InAppNotificationServiceImpl implements InAppNotificationService {
   constructor(
-    @Inject(InAppNotificationRepositoryInterface)
-    private readonly inAppNotificationRepository: InAppNotificationRepositoryInterface,
+    @Inject(InAppNotificationRepository)
+    private readonly inAppNotificationRepository: InAppNotificationRepository,
   ) {}
 
   create(

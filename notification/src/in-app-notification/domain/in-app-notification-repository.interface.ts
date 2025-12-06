@@ -1,6 +1,6 @@
 import { NotificationAggregate } from './in-app-notification.aggregate';
 
-export const InAppNotificationRepositoryInterface = Symbol.for(
+export const InAppNotificationRepository = Symbol.for(
   'InAppNotificationRepository',
 );
 export interface InAppNotificationRepository {

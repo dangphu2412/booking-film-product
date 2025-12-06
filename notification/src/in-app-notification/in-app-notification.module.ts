@@ -3,7 +3,7 @@ import { InAppNotificationController } from './presentation/in-app-notification.
 import { InAppNotificationService } from './domain/in-app-notification-service.interface';
 import { InAppNotificationServiceImpl } from './use-case/in-app-notification.service';
 import { InAppNotificationRepositoryImpl } from './infras/in-app-notification.repository';
-import { InAppNotificationRepositoryInterface } from './domain/in-app-notification-repository.interface';
+import { InAppNotificationRepository } from './domain/in-app-notification-repository.interface';
 
 @Module({
   controllers: [InAppNotificationController],
@@ -13,7 +13,7 @@ import { InAppNotificationRepositoryInterface } from './domain/in-app-notificati
       useClass: InAppNotificationServiceImpl,
     },
     {
-      provide: InAppNotificationRepositoryInterface,
+      provide: InAppNotificationRepository,
       useClass: InAppNotificationRepositoryImpl,
     },
   ],

@@ -1,0 +1,5 @@
+resources:
+  - kafka-ui.yml
+  - kafka.yml
+  - orkes-conductor.yml
+  - redis.yml
