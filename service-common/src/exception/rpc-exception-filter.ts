@@ -29,6 +29,8 @@ export class RpcServiceExceptionFilter
         metadata,
       };
 
+      this.logger.error(message);
+
       return throwError(() => message);
     }
 
