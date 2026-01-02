@@ -36,13 +36,11 @@ spec:
               value: "memory"
             - name: CONDUCTOR_REDIS_HOST
               value: "redis"
-            - name: CONDUCTOR_EVENT_QUEUES_KAFKA_ENABLED
-              value: "true"
-            # UPDATED: Connect to 'kafka-broker'
-            - name: CONDUCTOR_EVENT_QUEUES_KAFKA_KAFKA_CAM_BOOTSTRAP_SERVERS
-              value: "kafka-broker:9092"
-            - name: CONDUCTOR_EVENT_QUEUES_KAFKA_BOOTSTRAP_SERVERS
-              value: "kafka-broker:9092"
+            - name: JAVA_OPTS
+              value: >-
+                -Dconductor.event-queues.kafka.enabled=true
+                -Dconductor.event-queues.kafka.bootstrap-servers=kafka-broker:9092
+                -Dconductor.event-queues.kafka.KAFKA_CAM.bootstrap-servers=kafka-broker:9092
           resources:
             requests:
               memory: "512Mi"
