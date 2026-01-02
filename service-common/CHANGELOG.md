@@ -1,5 +1,11 @@
 # @dnp2412/service-common
 
+## 1.1.0
+
+### Minor Changes
+
+- a94ea9f: [Exception] Add error tag
+
 ## 1.0.1
 
 ### Patch Changes
