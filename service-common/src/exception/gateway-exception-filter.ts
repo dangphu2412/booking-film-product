@@ -35,6 +35,7 @@ export class HttpGatewayExceptionFilter implements ExceptionFilter {
       const businessCode = exception.metadata.get(
         BusinessException.BUSINESS_CODE_ID,
       )[0];
+
       const httpStatus = this.mapRPCToHTTPStatus(
         Number.parseInt(exception.code),
       );

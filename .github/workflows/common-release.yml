@@ -44,6 +44,9 @@ jobs:
       - name: Publish to npm
         run: pnpm changeset publish
         working-directory: ./service-common
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Commit version bump
         uses: stefanzweifel/git-auto-commit-action@v5
