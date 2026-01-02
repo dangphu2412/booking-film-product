@@ -4,7 +4,7 @@
   "description": "",
   "main": "./dist/index.js",
   "engines": {
-    "node": "22.x",
+    "node": "24.x",
     "pnpm": "10.x"
   },
   "publishConfig": {
@@ -22,7 +22,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.8.0",
+  "packageManager": "pnpm@10.27.0",
   "devDependencies": {
     "@grpc/grpc-js": "^1.13.4",
     "@nestjs/microservices": "^11.1.6",
