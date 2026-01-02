@@ -1,9 +1,4 @@
-import {
-  ArgumentsHost,
-  Catch,
-  Logger,
-  RpcExceptionFilter,
-} from "@nestjs/common";
+import { Catch, Logger, RpcExceptionFilter } from "@nestjs/common";
 import { Metadata, status } from "@grpc/grpc-js";
 import { Observable, throwError } from "rxjs";
 import { BusinessException, ErrorTag } from "./business-exception";
@@ -14,10 +9,7 @@ export class RpcServiceExceptionFilter
 {
   private readonly logger = new Logger(RpcServiceExceptionFilter.name);
 
-  catch(
-    exception: BusinessException | Error,
-    host: ArgumentsHost,
-  ): Observable<any> {
+  catch(exception: BusinessException | Error): Observable<any> {
     if (exception instanceof BusinessException) {
       const metadata = new Metadata();
       metadata.set(BusinessException.BUSINESS_CODE_ID, exception.code);
