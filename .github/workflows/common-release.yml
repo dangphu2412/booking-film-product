@@ -45,6 +45,7 @@ jobs:
         run: pnpm changeset publish
         working-directory: ./service-common
         env:
+          NPM_CONFIG_PROVENANCE: true # Tells npm to generate the OIDC-linked provenance attestation
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
