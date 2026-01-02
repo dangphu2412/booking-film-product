@@ -5,13 +5,14 @@ import {
   HttpException,
   HttpStatus,
   Logger,
-} from '@nestjs/common';
-import { Metadata } from '@grpc/grpc-js';
-import { FastifyReply, FastifyRequest } from 'fastify';
-import { BusinessException } from "./business-exception";
+} from "@nestjs/common";
+import { Metadata, status } from "@grpc/grpc-js";
+import { FastifyReply, FastifyRequest } from "fastify";
+import { BusinessException, ErrorTag } from "./business-exception";
 
 type HttpGatewayExceptionContext = {
   code: string;
+  tag: ErrorTag;
   businessCode: string;
   message: string;
   details?: Record<string, unknown>;
@@ -20,7 +21,7 @@ type HttpGatewayExceptionContext = {
 
 @Catch()
 export class HttpGatewayExceptionFilter implements ExceptionFilter {
-  private logger = new Logger(HttpGatewayExceptionFilter.name);
+  private readonly logger = new Logger(HttpGatewayExceptionFilter.name);
 
   catch(
     exception: HttpGatewayExceptionContext | HttpException | Error,
@@ -31,10 +32,15 @@ export class HttpGatewayExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<FastifyRequest>();
 
     if (this.isBusinessException(exception)) {
-      const businessCode = exception.metadata.get(BusinessException.BUSINESS_CODE_ID)[0];
+      const businessCode = exception.metadata.get(
+        BusinessException.BUSINESS_CODE_ID,
+      )[0];
+      const httpStatus = this.mapRPCToHTTPStatus(
+        Number.parseInt(exception.code),
+      );
 
-      return response.status(HttpStatus.UNPROCESSABLE_ENTITY).send({
-        statusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+      return response.status(httpStatus).send({
+        statusCode: httpStatus,
         businessCode: businessCode,
         message: exception.message,
         timestamp: new Date().toISOString(),
@@ -42,33 +48,11 @@ export class HttpGatewayExceptionFilter implements ExceptionFilter {
       });
     }
 
-    if (exception instanceof HttpException) {
-      if (exception.getStatus() >= 500) {
-        this.logger.error(exception);
-        this.logger.error({
-          body: request.body,
-          params: request.params,
-        });
-      }
-
-      return response.status(exception.getStatus()).send({
-        statusCode: exception.getStatus(),
-        message: exception.message,
-        timestamp: new Date().toISOString(),
-        path: request.url,
-      });
-    }
-
     this.logger.error(exception);
-    this.logger.error({
-      type: 'exception_metadata',
-      body: request.body,
-      params: request.params,
-    });
 
-    response.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
+    return response.status(HttpStatus.INTERNAL_SERVER_ERROR).send({
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-      message: 'Internal Server Error',
+      message: "Internal Server Error",
       timestamp: new Date().toISOString(),
       path: request.url,
     });
@@ -82,5 +66,18 @@ export class HttpGatewayExceptionFilter implements ExceptionFilter {
     return !!(exception as HttpGatewayExceptionContext).metadata.get(
       BusinessException.BUSINESS_CODE_ID,
     ).length;
+  }
+
+  private mapRPCToHTTPStatus(rpcCode: number): HttpStatus {
+    switch (rpcCode) {
+      case status.NOT_FOUND:
+        return HttpStatus.NOT_FOUND;
+      case status.ALREADY_EXISTS:
+        return HttpStatus.CONFLICT;
+      case status.INVALID_ARGUMENT:
+        return HttpStatus.BAD_REQUEST;
+      default:
+        return HttpStatus.INTERNAL_SERVER_ERROR;
+    }
   }
 }
